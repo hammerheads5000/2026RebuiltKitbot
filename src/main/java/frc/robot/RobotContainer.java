@@ -6,13 +6,27 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.TeleopDrive;
 
 public class RobotContainer {
+  Drive drive = new Drive();
+  CommandXboxController controller = new CommandXboxController(0);
+  TeleopDrive teleopDrive = new TeleopDrive(drive, controller);
+  Trigger driveForwardTrigger = controller.a();
+  Trigger driveBackwardTrigger = controller.b();
+
   public RobotContainer() {
+    drive.setDefaultCommand(teleopDrive);
     configureBindings();
   }
 
-  private void configureBindings() {}
+  private void configureBindings() {
+    driveForwardTrigger.whileTrue(drive.driveForwardCommand(0.4));
+    driveBackwardTrigger.whileTrue(drive.driveBackwardCommand(0.4));
+  }
 
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
