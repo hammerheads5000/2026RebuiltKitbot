@@ -12,41 +12,28 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
-  TalonSRX leftFrontMotor = new TalonSRX(0);
-  TalonSRX leftBackmotor = new TalonSRX(0);
-  TalonSRX rightFrontMotor = new TalonSRX(0);
-  TalonSRX rightBackMotor = new TalonSRX(0);
+  TalonSRX leftMotor = new TalonSRX(0);
+  TalonSRX rightMotor = new TalonSRX(0);
 
   /** Creates a new Drive. */
   public Drive() {
-    leftFrontMotor.setInverted(false);
-    leftBackmotor.setInverted(false);
-    rightFrontMotor.setInverted(true);
-    rightBackMotor.setInverted(true);
+    leftMotor.setInverted(false);
+    rightMotor.setInverted(true);
+    leftMotor.setNeutralMode(NeutralMode.Brake);
+    rightMotor.setNeutralMode(NeutralMode.Brake);
 
-    leftFrontMotor.setNeutralMode(NeutralMode.Brake);
-    leftBackmotor.setNeutralMode(NeutralMode.Brake);
-    rightFrontMotor.setNeutralMode(NeutralMode.Brake);
-    rightBackMotor.setNeutralMode(NeutralMode.Brake);
-
-    leftFrontMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
-    leftBackmotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
-    rightFrontMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
-    rightBackMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
+    leftMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
+    rightMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
   }
 
   public void setSpeeds(double leftSpeed, double rightSpeed) {
-        leftFrontMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
-        leftBackmotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
-        rightFrontMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
-        rightBackMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
+        leftMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
+        rightMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
     }
 
   public void stop() {
-        leftFrontMotor.neutralOutput();
-        leftBackmotor.neutralOutput();
-        rightFrontMotor.neutralOutput();
-        rightBackMotor.neutralOutput();
+        leftMotor.neutralOutput();
+        rightMotor.neutralOutput();
     }
 
   public Command driveForwardCommand(double speed) {
