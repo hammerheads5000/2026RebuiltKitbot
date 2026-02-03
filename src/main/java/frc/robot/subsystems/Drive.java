@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
-  TalonSRX leftMotor = new TalonSRX(0);
-  TalonSRX rightMotor = new TalonSRX(0);
+  TalonSRX leftMotor = new TalonSRX(2);
+  TalonSRX rightMotor = new TalonSRX(3);
 
   /** Creates a new Drive. */
   public Drive() {
@@ -43,6 +43,10 @@ public class Drive extends SubsystemBase {
   public Command driveBackwardCommand(double speed) {
         return this.startEnd(() -> setSpeeds(-speed, -speed), this::stop);
     }
+
+  public Command spinCommand(double speed){
+        return this.startEnd(() -> setSpeeds(speed, -speed), this::stop);
+  }  
 
   @Override
   public void periodic() {
