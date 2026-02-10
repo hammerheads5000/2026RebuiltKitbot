@@ -11,12 +11,14 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Drive extends SubsystemBase {
+public class Drive extends SubsystemBase 
+{
   TalonSRX leftMotor = new TalonSRX(2);
   TalonSRX rightMotor = new TalonSRX(3);
 
   /** Creates a new Drive. */
-  public Drive() {
+  public Drive() 
+  {
     leftMotor.setInverted(false);
     rightMotor.setInverted(true);
     leftMotor.setNeutralMode(NeutralMode.Brake);
@@ -26,30 +28,36 @@ public class Drive extends SubsystemBase {
     rightMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
   }
 
-  public void setSpeeds(double leftSpeed, double rightSpeed) {
-        leftMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
-        rightMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
-    }
+  public void setSpeeds(double leftSpeed, double rightSpeed) 
+  {
+    leftMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
+    rightMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
+  }
 
-  public void stop() {
-        leftMotor.neutralOutput();
-        rightMotor.neutralOutput();
-    }
+  public void stop() 
+  {
+    leftMotor.neutralOutput();
+    rightMotor.neutralOutput();
+  }
 
-  public Command driveForwardCommand(double speed) {
-        return this.startEnd(() -> setSpeeds(speed, speed), this::stop);
-    }
+  public Command driveForwardCommand(double speed) 
+  {
+    return this.startEnd(() -> setSpeeds(speed, speed), this::stop);
+  }
 
-  public Command driveBackwardCommand(double speed) {
-        return this.startEnd(() -> setSpeeds(-speed, -speed), this::stop);
-    }
+  public Command driveBackwardCommand(double speed) 
+  {
+    return this.startEnd(() -> setSpeeds(-speed, -speed), this::stop);
+  }
 
-  public Command spinCommand(double speed){
-        return this.startEnd(() -> setSpeeds(speed, -speed), this::stop);
+  public Command spinCommand(double speed)
+  {
+    return this.startEnd(() -> setSpeeds(speed, -speed), this::stop);
   }  
 
   @Override
-  public void periodic() {
+  public void periodic() 
+  {
     // This method will be called once per scheduler run
   }
 }
