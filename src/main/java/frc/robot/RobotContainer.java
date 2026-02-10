@@ -19,7 +19,6 @@ public class RobotContainer {
   TeleopDrive teleopDrive = new TeleopDrive(drive, controller);
   Trigger shootTrigger = controller.rightTrigger();
   Trigger intakeTrigger = controller.leftTrigger();
-  Trigger intakeAndShootTrigger =  controller.rightBumper();
   Trigger driveForwardTrigger = controller.a();
   Trigger driveBackwardTrigger = controller.b();
   Trigger spinTrigger  =  controller.y(); 
@@ -33,9 +32,8 @@ public class RobotContainer {
     driveForwardTrigger.whileTrue(drive.driveForwardCommand(0.4));
     driveBackwardTrigger.whileTrue(drive.driveBackwardCommand(0.4));
     spinTrigger.whileTrue(drive.spinCommand(0.7));
-    shootTrigger.whileTrue(fuelMechanism.shootCommand(0.9));
-    intakeTrigger.whileFalse(fuelMechanism.intakeCommand(0.7));
-    intakeAndShootTrigger.whileTrue(fuelMechanism.intakeAndShootCommand(1));
+    shootTrigger.whileTrue(fuelMechanism.shootCommand(1));
+    intakeTrigger.whileTrue(fuelMechanism.intakeCommand(1));
 
   }
 

@@ -7,33 +7,41 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class FuelMechanism extends SubsystemBase {
-  TalonSRX intakeAndShooterMotor = new TalonSRX(11);
+  VoltageOut voltageRequest = new VoltageOut(0);
+  TalonFX intakeAndShooterMotor = new TalonFX(16);
   TalonSRX deciderFuelMotor = new TalonSRX(1);
+  DoubleEntry speedEntry = NetworkTableInstance.getDefault().getDoubleTopic("name").getEntry(0);
 
   /** Creates a new FuelMechanism. */
   public FuelMechanism() {
-    intakeAndShooterMotor.setInverted(false);
     deciderFuelMotor.setInverted(false);
-
-    intakeAndShooterMotor.setNeutralMode(NeutralMode.Brake);
     deciderFuelMotor.setNeutralMode(NeutralMode.Brake);
-
-    intakeAndShooterMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
     deciderFuelMotor.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 40, 40, 0.5));
-  }
+  MotorOutputConfigs outputConfigs = new MotorOutputConfigs()
+        .withInverted(InvertedValue.CounterClockwise_Positive)
+        .withNeutralMode(NeutralModeValue.Brake);
+    speedEntry.set(0);
+    intakeAndShooterMotor.getConfigurator().apply(outputConfigs);
+}
 
   public void setSpeeds(double leftSpeed, double rightSpeed) {
-        intakeAndShooterMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, leftSpeed);
+        intakeAndShooterMotor.setControl(voltageRequest.withOutput(leftSpeed));
         deciderFuelMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
     }
 
   public void stop() {
-        intakeAndShooterMotor.neutralOutput();
         deciderFuelMotor.neutralOutput();
     }  
 
@@ -43,10 +51,6 @@ public class FuelMechanism extends SubsystemBase {
 
   public Command intakeCommand(double speed) {
     return this.startEnd(() -> setSpeeds(speed, speed), this::stop);
-  }
-
-  public Command intakeAndShootCommand(double speed) {
-    return this.startEnd(() -> setSpeeds(speed, -speed), this::stop);
   }
 
   @Override
