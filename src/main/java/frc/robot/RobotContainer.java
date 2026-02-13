@@ -32,8 +32,8 @@ public class RobotContainer {
     driveForwardTrigger.whileTrue(drive.driveForwardCommand(0.4));
     driveBackwardTrigger.whileTrue(drive.driveBackwardCommand(0.4));
     spinTrigger.whileTrue(drive.spinCommand(0.7));
-    shootTrigger.whileTrue(fuelMechanism.shootCommand(1));
-    intakeTrigger.whileTrue(fuelMechanism.intakeCommand(1));
+    shootTrigger.whileTrue(fuelMechanism.shootCommand(8));
+    intakeTrigger.whileTrue(fuelMechanism.intakeCommand(8));
 
   }
 
