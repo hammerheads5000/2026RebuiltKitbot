@@ -8,31 +8,34 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class TeleopDrive extends Command {
-  Drive drive;
-  CommandXboxController controller;
+    private final Drive drive;
+    private final CommandXboxController controller;
 
-  /** Creates a new TeleopDrive. */
-  public TeleopDrive(Drive drive, CommandXboxController controller) {
-    this.drive = drive;
-    this.controller = controller;
-    addRequirements(drive);
-  }
+    public TeleopDrive(Drive drive, CommandXboxController controller) {
+        this.drive = drive;
+        this.controller = controller;
+        addRequirements(drive);
+    }
 
-  @Override
-  public void initialize() {}
+    @Override
+    public void execute() {
+        double leftSpeed = -controller.getLeftY();
+        double rightSpeed = -controller.getRightY();
 
-  @Override
-  public void execute() {
-    double leftSpeed = -controller.getLeftY();
-    double rightSpeed = -controller.getRightY();
-    drive.setSpeeds(leftSpeed, rightSpeed);
-  }
+        // deadband to prevent joystick noise
+        if (Math.abs(leftSpeed) < 0.05) leftSpeed = 0;
+        if (Math.abs(rightSpeed) < 0.05) rightSpeed = 0;
 
-  @Override
-  public void end(boolean interrupted) {}
+        drive.setSpeeds(leftSpeed, rightSpeed);
+    }
 
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+    @Override
+    public boolean isFinished() {
+        return false; // runs continuously during teleop
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        drive.stop();
+    }
 }
