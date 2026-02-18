@@ -22,7 +22,7 @@ public class TeleopDrive extends Command {
         double leftSpeed = -controller.getLeftY();
         double rightSpeed = -controller.getRightY();
 
-        // deadband to prevent joystick noise
+        // deadband to prevent joystick moving without joystick
         if (Math.abs(leftSpeed) < 0.05) leftSpeed = 0;
         if (Math.abs(rightSpeed) < 0.05) rightSpeed = 0;
 
