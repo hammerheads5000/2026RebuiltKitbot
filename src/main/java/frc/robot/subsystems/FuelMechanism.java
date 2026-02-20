@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -13,9 +15,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,6 +29,8 @@ public class FuelMechanism extends SubsystemBase {
   TalonFX intakeAndShooterMotor = new TalonFX(16);
   TalonSRX deciderFuelMotor = new TalonSRX(1);
   DoubleEntry speedEntry = NetworkTableInstance.getDefault().getDoubleTopic("name").getEntry(0);
+  BangBangController controller = new BangBangController();
+  SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0, 0.127, 0);
 
   /** Creates a new FuelMechanism. */
   public FuelMechanism() {
@@ -35,10 +42,12 @@ public class FuelMechanism extends SubsystemBase {
         .withNeutralMode(NeutralModeValue.Brake);
     speedEntry.set(0);
     intakeAndShooterMotor.getConfigurator().apply(outputConfigs);
+    feedforward.calculate(10,20); 
 }
 
-  public void setSpeeds(double leftSpeed, double rightSpeed) {
-        intakeAndShooterMotor.setControl(voltageRequest.withOutput(leftSpeed));
+  public void setSpeeds(AngularVelocity setpoint, double rightSpeed) {
+        intakeAndShooterMotor.setVoltage(controller.calculate(intakeAndShooterMotor.getVelocity(true).getValue().in(RotationsPerSecond), setpoint.in(RotationsPerSecond)) * 1 + feedforward.calculate(setpoint.in(RotationsPerSecond)));
+        SmartDashboard.putNumber(getName(), intakeAndShooterMotor.getVelocity(true).getValue().in(RotationsPerSecond));
         deciderFuelMotor.set(com.ctre.phoenix.motorcontrol.ControlMode.PercentOutput, rightSpeed);
     }
 
@@ -47,12 +56,12 @@ public class FuelMechanism extends SubsystemBase {
         intakeAndShooterMotor.setControl(voltageRequest.withOutput(0));
     }  
 
-  public Command shootCommand(double speed) {
-    return this.startEnd(() -> setSpeeds(speed, -speed), this::stop);
+  public Command shootCommand(AngularVelocity speed) {
+    return this.runEnd(() -> setSpeeds(speed, -0.5), this::stop);
   }
 
-  public Command intakeCommand(double speed) {
-    return this.startEnd(() -> setSpeeds(speed, speed), this::stop);
+  public Command intakeCommand(AngularVelocity speed) {
+    return this.runEnd(() -> setSpeeds(speed, 0.5), this::stop);
   }
 
   @Override

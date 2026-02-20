@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.RPM;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -17,11 +19,13 @@ public class RobotContainer {
   FuelMechanism fuelMechanism = new FuelMechanism();
   CommandXboxController controller = new CommandXboxController(0);
   TeleopDrive teleopDrive = new TeleopDrive(drive, controller);
-  Trigger shootTrigger = controller.rightTrigger();
+  Trigger farShootTrigger = controller.rightTrigger();
+  Trigger nearShootTrigger = controller.rightBumper();
   Trigger intakeTrigger = controller.leftTrigger();
   Trigger driveForwardTrigger = controller.a();
   Trigger driveBackwardTrigger = controller.b();
-  Trigger spinTrigger  =  controller.y(); 
+  Trigger cSpinTrigger  =  controller.y(); 
+  Trigger ccSpinTrigger  =  controller.x();
 
   public RobotContainer() {
     drive.setDefaultCommand(teleopDrive);
@@ -31,9 +35,11 @@ public class RobotContainer {
   private void configureBindings() {
     driveForwardTrigger.whileTrue(drive.driveForwardCommand(0.4));
     driveBackwardTrigger.whileTrue(drive.driveBackwardCommand(0.4));
-    spinTrigger.whileTrue(drive.spinCommand(0.7));
-    shootTrigger.whileTrue(fuelMechanism.shootCommand(8));
-    intakeTrigger.whileTrue(fuelMechanism.intakeCommand(8));
+    cSpinTrigger.whileTrue(drive.spinCommand(0.7));
+    ccSpinTrigger.whileTrue(drive.spinCommand(-0.7));
+    farShootTrigger.whileTrue(fuelMechanism.shootCommand(RPM.of(4350)));
+    nearShootTrigger.whileTrue(fuelMechanism.shootCommand(RPM.of(3700)));
+    intakeTrigger.whileTrue(fuelMechanism.intakeCommand(RPM.of(4000)));
 
   }
 
