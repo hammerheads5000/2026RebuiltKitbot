@@ -23,4 +23,4 @@ This ReadMe file contains the code and operational documentation for our 2026 Ki
 * **Testing & Tuning:** All systems are currently tuned and operational. No additional testing is required at this time.
 
 ---
-*Note for Contributors: Please update this README document immediately whenever the code or control layout is changed.*
+*Note for all Coders working on KitBot: Please update this README document immediately whenever the code or control layout is changed.*
