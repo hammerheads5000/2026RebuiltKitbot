@@ -1,17 +1,26 @@
-# 2026RebuiltKitbot
-The Hammerheads' (FRC Team 5000) code for the 2026 kitbot, and explanation on how it operates.
+# 2026 Rebuilt Kitbot Controls
+**The Hammerheads (FRC Team 5000)**
 
-   So far, with this code, Kitbot can:
-      -drive foward with 'a', backward with 'b'
-      -spin clockwise with 'y' and counterclockwise with 'x'
-      -drive using the joysticks
-      -intake using the left trigger
-      -shoot from farther away using the right trigger
-      -shoot from close to the hub using the right bumper
-   
-   Kitbot uses BangBang and feedforward on the motor for shooting/intaking
-   
-   What needs testing/tuning:
-       -nothing at this point
+This repository contains the code and operational documentation for our 2026 Kitbot.
 
-Update when code is changed.
+## Controller Mapping
+
+| Input | Action |
+| :--- | :--- |
+| **Joysticks** | Standard Driving |
+| **A Button** | Drive Forward |
+| **B Button** | Drive Backward |
+| **X Button** | Spin Counter-Clockwise |
+| **Y Button** | Spin Clockwise |
+| **Left Trigger** | Intake |
+| **Right Trigger** | Shoot (Far from Hub) |
+| **Right Bumper** | Shoot (Close to Hub) |
+
+## Technical Details
+* **Shooter & Intake Control:** The robot has a **Bang-Bang** controller combined with **Feedforward** for highly responsive and accurate motor control.
+
+## Current Status
+* **Testing & Tuning:** All systems are currently tuned and operational. No additional testing is required at this time.
+
+---
+*Note for Contributors: Please update this README document immediately whenever the code or control layout is changed.*
