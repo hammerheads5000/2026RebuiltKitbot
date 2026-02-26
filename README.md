@@ -1,7 +1,7 @@
 # 2026 Rebuilt Kitbot Controls
 **The Hammerheads (FRC Team 5000)**
 
-This repository contains the code and operational documentation for our 2026 Kitbot.
+This ReadMe file contains the code and operational documentation for our 2026 Kitbot.
 
 ## Controller Mapping
 
