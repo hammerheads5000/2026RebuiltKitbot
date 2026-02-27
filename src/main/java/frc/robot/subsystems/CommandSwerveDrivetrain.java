@@ -92,4 +92,20 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, 
     public void periodic() {
         logger.telemeterize(this.getState());
     }
+     @Override
+    public void periodic() {
+        logger.telemeterize(this.getState());
+    }
+
+    public void seedFieldRelative() {
+        this.seedFieldCentric();
+    }
+
+    public void resetPose(Pose2d pose) {
+        super.resetPose(pose);
+    }
+
+    public Command getAutoCommand(String pathName) {
+        return AutoBuilder.buildAuto(pathName);
+    }
 }
