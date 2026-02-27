@@ -31,6 +31,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.LinearVelocity;
 
 public class Constants {
+    // Note: Bus name must match your Tuner X configuration (e.g., "Bobby")
     public static final CANBus CAN_FD_BUS = new CANBus("Bobby");
     public static final Distance BUMPER_THICKNESS = Inches.of(3.5);
 
