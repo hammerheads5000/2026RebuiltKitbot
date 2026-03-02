@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.math.geometry.Pose2d;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
@@ -35,6 +37,11 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, 
     private final Telemetry logger = new Telemetry(SwerveConstants.FAST_DRIVE_SPEED.in(edu.wpi.first.units.Units.MetersPerSecond));
     private final SwerveRequest.ApplyRobotSpeeds autoRequest = new SwerveRequest.ApplyRobotSpeeds();
 
+    private final SwerveRequest.FieldCentric driveRequest = new SwerveRequest.FieldCentric()
+    .withDeadband(SwerveConstants.LINEAR_VEL_DEADBAND.in(edu.wpi.first.units.Units.MetersPerSecond))
+    .withRotationalDeadband(SwerveConstants.ANGLULAR_VEL_DEADBAND.in(edu.wpi.first.units.Units.RadiansPerSecond))
+    .withDriveRequestType(SwerveConstants.DRIVE_REQUEST_TYPE);
+
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants<?, ?, ?>... modules) {
         super(TalonFX::new, TalonFX::new, CANcoder::new, driveTrainConstants, OdometryUpdateFrequency, modules);
         configurePathPlanner();
@@ -49,6 +56,14 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain<TalonFX, TalonFX, 
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
         return run(() -> this.setControl(requestSupplier.get()));
+    }
+
+    public Command teleopDrive(DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot) {
+        return applyRequest(() -> driveRequest
+            .withVelocityX(x.getAsDouble())
+            .withVelocityY(y.getAsDouble())
+            .withRotationalRate(rot.getAsDouble())
+        );
     }
 
     private void configurePathPlanner() {
