@@ -42,7 +42,7 @@ public class FuelMechanism extends SubsystemBase {
         .withNeutralMode(NeutralModeValue.Brake);
     speedEntry.set(0);
     intakeAndShooterMotor.getConfigurator().apply(outputConfigs);
-    feedforward.calculate(10,20); 
+    feedforward.calculate(10); 
 }
 
   public void setSpeeds(AngularVelocity setpoint, double rightSpeed) {
